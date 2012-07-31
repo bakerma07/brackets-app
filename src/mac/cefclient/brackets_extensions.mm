@@ -278,6 +278,10 @@ public:
         {
             errorCode = ExecuteShowDeveloperTools(arguments, retval, exception);
         }
+        else if (name == "ShowExtensionsFolder" )
+        {
+            errorCode = ShowExtensionsFolder(arguments, retval, exception);
+        }
         else if (name == "GetElapsedMilliseconds")
         {
             // Get
@@ -303,6 +307,24 @@ public:
             lastError = errorCode;
             return true;
         }
+        
+        return false;
+    }
+                  
+    int ShowExtensionsFolder(const CefV8ValueList& args,
+                          CefRefPtr<CefV8Value>& retval,
+                          CefString& exception)
+    {
+        std::string appPath = [[[NSBundle mainBundle] bundlePath] UTF8String];
+        std::string extensionPath = appPath + "/Contents/Resources/brackets/src/extensions";
+        
+        
+        NSString* scriptString = [NSString stringWithFormat:
+                                  @"activate application \"Finder\"\n tell application \"Finder\" to open posix file \"%s\"", extensionPath.c_str()];
+        NSAppleScript* script = [[NSAppleScript alloc] initWithSource: scriptString];
+        NSDictionary* errorDict = nil;
+        [script executeAndReturnError: &errorDict];
+        [script release]; 
         
         return false;
     }

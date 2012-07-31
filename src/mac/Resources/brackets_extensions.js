@@ -370,6 +370,11 @@ if (!brackets.app) {
     brackets.app.closeLiveBrowser = function (callback) {
         CloseLiveBrowser(callback);
     };
+ 
+    native function ShowExtensionsFolder();
+    brackets.app.showExtensionsFolder = function () {
+        ShowExtensionsFolder();
+    };
 
     /**
      * Workaround for CEF bug #501. On Mac, focus (and blur) events are not sent to the
